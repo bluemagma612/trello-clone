@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, useContext } from 'react';
 import { nanoid } from 'nanoid';
 import { findItemIndexById } from './utils/findItemIndexById';
-import { moveItem } from './moveItem';
+import { moveItem } from './utils/moveItem';
 import { DragItem } from './DragItem';
 
 type Action =

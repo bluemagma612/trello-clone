@@ -3,7 +3,7 @@ import { ColumnContainer, ColumnTitle } from './styles';
 import { AddNewItem } from './AddNewItem';
 import { useAppState } from './AppStateContext';
 import { Card } from './Card';
-import { useItemDrag } from './useItemDrag';
+import { useItemDrag } from './utils/useItemDrag';
 import { useDrop } from 'react-dnd';
 import { DragItem } from './DragItem';
 import { isHidden } from './utils/IsHidden';
@@ -12,9 +12,10 @@ interface ColumnProps {
 	text: string;
 	index: number;
 	id: string;
+	isPreview?: boolean;
 }
 
-export const Column = ({ text, index, id }: ColumnProps) => {
+export const Column = ({ text, index, id, isPreview }: ColumnProps) => {
 	const { state, dispatch } = useAppState();
 	const ref = useRef<HTMLDivElement>(null);
 	const [, drop] = useDrop({
@@ -39,8 +40,9 @@ export const Column = ({ text, index, id }: ColumnProps) => {
 
 	return (
 		<ColumnContainer
+			isPreview={isPreview}
 			ref={ref}
-			isHidden={isHidden(state.draggedItem, 'COLUMN', id)}>
+			isHidden={isHidden(isPreview, state.draggedItem, 'COLUMN', id)}>
 			<ColumnTitle>{text}</ColumnTitle>
 			{state.lists[index].tasks.map((task, i) => (
 				<Card text={task.text} key={task.id} index={i} />
