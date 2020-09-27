@@ -15,24 +15,25 @@ interface ColumnProps {
 }
 
 export const Column = ({ text, index, id }: ColumnProps) => {
+	const { state, dispatch } = useAppState();
+	const ref = useRef<HTMLDivElement>(null);
 	const [, drop] = useDrop({
 		accept: 'COLUMN',
 		hover(item: DragItem) {
 			const dragIndex = item.index;
 			const hoverIndex = index;
+
 			if (dragIndex === hoverIndex) {
 				return;
 			}
-
-			dispatch({ type: 'MOVE_LIST', payload: { dragIndex, hoverIndex } });
+			dispatch({
+				type: 'MOVE_LIST',
+				payload: { dragIndex, hoverIndex },
+			});
 			item.index = hoverIndex;
 		},
 	});
-
-	const { state, dispatch } = useAppState();
-	const ref = useRef<HTMLDivElement>(null);
-
-	const { drag } = useItemDrag({ type: 'COLUMN', index, id, text });
+	const { drag } = useItemDrag({ type: 'COLUMN', id, index, text });
 
 	drag(drop(ref));
 
