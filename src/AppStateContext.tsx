@@ -113,10 +113,10 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
 	}
 };
 
-const appData: AppState = {
-	lists: [],
-	draggedItem: undefined,
-};
+// const appData: AppState = {
+// 	lists: [],
+// 	draggedItem: undefined,
+// };
 
 const AppStateContext = createContext<AppStateContextProps>(
 	{} as AppStateContextProps
@@ -128,8 +128,11 @@ export interface AppState {
 }
 
 export const AppStateProvider = withData(
-	({ children }: React.PropsWithChildren<{}>) => {
-		const [state, dispatch] = useReducer(appStateReducer, appData);
+	({
+		children,
+		initialState,
+	}: React.PropsWithChildren<{ initialState: AppState }>) => {
+		const [state, dispatch] = useReducer(appStateReducer, initialState);
 		useEffect(() => {
 			save(state);
 		}, [state]);
