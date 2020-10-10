@@ -4,6 +4,7 @@ import { findItemIndexById } from './utils/findItemIndexById';
 import { moveItem } from './utils/moveItem';
 import { DragItem } from './DragItem';
 import { save } from './api';
+import { withData } from './withData';
 
 type Action =
 	| {
@@ -142,17 +143,19 @@ export interface AppState {
 	draggedItem: DragItem | undefined;
 }
 
-export const AppStateProvider = ({ children }: React.PropsWithChildren<{}>) => {
-	const [state, dispatch] = useReducer(appStateReducer, appData);
-	useEffect(() => {
-		save(state);
-	}, [state]);
-	return (
-		<AppStateContext.Provider value={{ state, dispatch }}>
-			{children}
-		</AppStateContext.Provider>
-	);
-};
+export const AppStateProvider = withData(
+	({ children }: React.PropsWithChildren<{}>) => {
+		const [state, dispatch] = useReducer(appStateReducer, appData);
+		useEffect(() => {
+			save(state);
+		}, [state]);
+		return (
+			<AppStateContext.Provider value={{ state, dispatch }}>
+				{children}
+			</AppStateContext.Provider>
+		);
+	}
+);
 
 export const useAppState = () => {
 	return useContext(AppStateContext);
